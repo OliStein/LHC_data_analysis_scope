@@ -74,8 +74,9 @@ i.data_list_creator('.txt',pflag)
 p.set_save_path(plot_path,pflag)
 ar.infrastruc(ana_res_path,pflag)
 
-header=[['time_stamp','year','month','day','hour','minute','second','time sec','time zero','delta time zero','beam','ip','loc','dcum','type','daq_name','channel','mode','beamstatus',
-         't_count','t_count_inc','t_count_start','restart','counts','dcounts','dtime','run','analysed',
+header=[['time_stamp','year','month','day','hour','minute','second','time sec','time zero',
+         'delta time zero','beam','ip','loc','dcum','type','daq_name','channel','mode','beamstatus',
+         't total','t start','t end','t delta','offset','offset_corr','noise','sig 10 pt','sig 10 t','sig 50 pt','sig 50 t','run','analysed',
          'file_name','file_name_path']]
 
 scope_conf = [['daq_name'        ,'ip'   ,'beam' ,'loc'  ,'dcum'     ,'type','channel','name'],
@@ -122,7 +123,15 @@ for k in range(1,max_it):
 # #         break
         a.data_loader(line,pflag)
         
-#         a.data_check(pflag)
+        a.data_check(pflag)
+        a.time_info(line,a.data,pflag)
+        a.offset_corr(line,a.data,pflag)
+        a.noise_finder(line,a.data,pflag)
+        a.sig_above(line,a.data,10,pflag)
+        a.sig_above(line,a.data,50,pflag)
+        
+        
+        
 #         a.bin_time_cor(pflag)
 #         a.c_counter(line,pflag)
 #         a.set_t_zero(line,pflag)
