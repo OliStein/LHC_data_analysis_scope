@@ -342,7 +342,9 @@ g.printer('pflag set to 1',pflag)
 # working directory with the main script 
 # and the result folders
 # cwd = '/Users/Oli/work/python/LHC_data_analysis_scope/test_env'
-cwd = '/Users/Oli/work/python/LHC_data_analysis_scope/20150727_1'
+# cwd = '/Users/Oli/work/python/LHC_data_analysis_scope/20150729'
+# cwd = '/Users/Oli/work/python/LHC_data_analysis_scope/20150731'
+cwd = '/Users/Oli/work/python/LHC_data_analysis_scope/20150803_test_env'
 
 # result folders
 data_fold = 'data'
@@ -353,7 +355,9 @@ ana_res_fold = 'ana_res'
 # data_path  = '/Users/Oli/work/dBLM_readout/IP4/ROSYAX106E20028/'
 # data_path  = '/Users/Oli/work/dBLM_readout/IP2/data/test_env/'
 # data_path  = '/Users/Oli/work/dBLM_readout/IP2/data/20150724_data_sets/'
-data_path  = '/Users/Oli/work/dBLM_readout/IP2/data/20150727_data_sets/'
+# data_path  = '/Users/Oli/work/dBLM_readout/IP2/data/20150727_data_sets/'
+data_path  = '/Users/Oli/work/dBLM_readout/test_env/data/20150803_data_sets/'
+# data_path  = '/Users/Oli/work/dBLM_readout/IP8/data/20150731_data_sets/'
 
 # data_path  = '/Users/Oli/work/dBLM_readout/IP4/ROSYAX106E20028/20150713_hist_test'
 # data_path = os.path.join(cwd,data_fold)
@@ -370,15 +374,26 @@ for i in daq_list:
 
 # header list 
 # conatins the column names in the ana_file
-header=[['time_stamp','daq_name','mode','ip','loc','dcum','type','beam','year','month','day','hour','minute','second','sec','time stamp',
-         'offset_corr','offset','ns convert','moving average','num pts moving average','noise','run','analysed',
+header=[['time_stamp','daq_name','channel','ip','loc','dcum','type','beam',
+         'year','month','day','hour','minute','second','sec','time stamp','res',
+         'amp','amp_corr','offset_corr','offset','ns convert','moving average','num pts moving average','noise',
+         'max','min','pos_sig','neg_sig','run','analysed',
          'file_name','file_name_path']]
 
 # info about rosy devices
-daq_conf = [['daq_name'        ,'ip'   ,'beam' ,'loc'  ,'dcum'     ,'type'],
-             ['cfo-ua23-bhascp'     ,'2'    ,'1'    ,'1'    ,'9929.46'  ,'CIVIDEC' ],
-             ['cfo-ua56-bhascp'    ,'1'    ,'2'    ,'9936.93'  ,'CIVIDEC' ],
-             ['cfo-ua78-bhascp' ,'4'    ,'2'    ,'2'    ,'10057.23'  ,'CIVIDEC' ],
+daq_conf = [['file_info'            ,'daq_name'                 ,'ip'   ,'beam' ,'loc'   ,'delta'   ,'dcum'     ,'type'     ,'amp'],
+            ['cfo-ua23-bhascp_C1'   ,'cfo-ua23-bhascp'      ,'2'    ,'1'    ,'1'     ,'10'      ,'3254.00'  ,'CIVIDEC'      ,'1'],
+            ['cfo-ua23-bhascp_C2'   ,'cfo-ua23-bhascp'      ,'2'    ,'1'    ,'1'     ,'10'      ,'3254.00'  ,'CIVIDEC'      ,'2'],
+            ['cfo-ua23-bhascp_C3'   ,'cfo-ua23-bhascp'       ,'2'    ,'1'    ,'1'     ,'10'      ,'3254.00'  ,'CIVIDEC'     ,'3'],
+            ['cfo-ua23-bhascp_C4'   ,'cfo-ua23-bhascp'       ,'2'    ,'1'    ,'1'     ,'10'      ,'3254.00'  ,'CIVIDEC'     ,'4'],
+            ['cfo-ua56-bhascp_C1'   ,'cfo-ua56-bhascp'       ,'6'    ,'1'    ,'1'     ,'100'     ,'16505.00' ,'CIVIDEC'     ,'5'],
+            ['cfo-ua56-bhascp_C2'   ,'cfo-ua56-bhascp'       ,'6'    ,'1'    ,'1'     ,'100'     ,'16505.00' ,'CIVIDEC'     ,'6'],
+            ['cfo-ua56-bhascp_C3'   ,'cfo-ua56-bhascp'       ,'6'    ,'2'    ,'1'     ,'100'     ,'16505.00' ,'CIVIDEC'     ,'7'],
+            ['cfo-ua56-bhascp_C4'   ,'cfo-ua56-bhascp'       ,'6'    ,'2'    ,'1'     ,'100'     ,'16505.00' ,'CIVIDEC'     ,'8'],
+            ['cfo-ua87-bhasp_C1'    ,'cfo-ua87-bhascp'        ,'8'    ,'2'    ,'2'     ,'1000'    ,'23392.63' ,'CIVIDEC'    ,'9'],
+            ['cfo-ua87-bhasp_C2'    ,'cfo-ua87-bhascp'        ,'8'    ,'2'    ,'2'     ,'1000'    ,'23392.63' ,'CIVIDEC'    ,'10'],
+            ['cfo-ua87-bhasp_C3'    ,'cfo-ua87-bhascp'        ,'8'    ,'2'    ,'2'     ,'1000'    ,'23392.63' ,'CIVIDEC'    ,'11'],
+            ['cfo-ua87-bhasp_C4'    ,'cfo-ua87-bhascp'        ,'8'    ,'2'    ,'2'     ,'1000'    ,'23392.63' ,'CIVIDEC'    ,'12'],
             ]
 
 
@@ -492,12 +507,12 @@ for i in range(len(daq_list)):
         # current line of the ana_file
         line = ar.ana_file[k]
         
-        if not line[-2].endswith('C1_14142_data.txt'):
+        if not line[-2].endswith('C3_00009_data.txt'):
             skip = 1
             g.printer('line will be skipped',pflag)
         else:
             g.printer('file will be analysied',pflag)
-            
+        skip = 0
         if skip != 1:       
             # if force flag == 1, reanalysis
             ana_flag = a.tba_check(line,force_flag,pflag)
@@ -507,42 +522,57 @@ for i in range(len(daq_list)):
                 g.tprinter('start analysis',pflag)
                 
                 # extracts name infos
-                a.name_info_hist(line,daq_conf,pflag)
-    #             
-    #             # converts the time stamp into readable time information
-                a.time_cor_scope(line,pflag)
-        #             
-    #             # loads the data  
-                a.data_loader(line,pflag)
-    #             
-    #             # checks if data is ok
-                a.data_check(pflag)
+                a.name_info_scope(line,daq_conf,pflag)
                 
+                # converts the time stamp into readable time information
+                a.time_cor_scope(line,pflag)
+#         #             
+                # loads the data  
+                a.data_loader(line,pflag)
+#     #             
+#     #             # checks if data is ok
+#                 a.data_check(pflag)
+                # converts time data into nano seconds                
                 a.ns_convert(line,pflag)
+                
+                # takes the amplification/attenuation into account   
+                a.amp_corr(line,pflag)
+                
                 # offset correction
                 a.offset_corr(line,a.data,pflag)
-                
+#                 
                 # moving average
-                a.moving_average(line,5)
+                a.moving_average(line,5,pflag)
                     
     #             print a.data[1,1]
+#                 
+                # noise calc
+                a.noise_finder(line,a.data,pflag) 
+    
+                a.max_finder(line,a.data,pflag)
                 
+                a.min_finder(line,a.data,pflag)
+                
+                a.signal_outside_noise(line,a.data,4,pflag)
                     
     #             # converts bins into time 
     #             a.bin_time_cor(pflag)
                 # noise calc
-                a.noise_finder(line,a.data,pflag) 
+#                 a.noise_finder(line,a.data,pflag) 
                     
                 # creating plots
                 save_flag = 1
-                p.plotter_overview(line,a.data,a.header,save_flag,pflag)
-                
-#                 p.simple_plotter_zoom(line,a.data,a.header,-1000,3000,save_flag,pflag)
+#                 p.plotter_overview(line,a.data,a.header,save_flag,pflag)
+#                 p.simple_plotter_zoom(line,a.data,a.header,-10000,100000,'1_trun',save_flag,pflag)
+#                 p.simple_plotter_zoom(line,a.data,a.header,-500,3000,'part',save_flag,pflag)
+#                 p.simple_plotter_zoom(line,a.data,a.header,-100,1500,'part',save_flag,pflag)
+#                 p.simple_plotter_zoom(line,a.data,a.header,400,750,'part',save_flag,pflag)
 #                 p.simple_plotter_zoom(line,a.data,a.header,-100,400,save_flag,pflag)
 #                 p.simple_plotter_zoom(line,a.data,a.header,-1000,10000,save_flag,pflag)
-                p.simple_plotter_zoom(line,a.data,a.header,3000,6000,save_flag,pflag)
+#                 p.simple_plotter_zoom(line,a.data,a.header,3000,6000,save_flag,pflag)
+#                 p.simple_plotter_zoom(line,a.data,a.header,85000,95000,save_flag,pflag)
 #                 p.simple_plotter_zoom(line,a.data,a.header,3500,4500,save_flag,pflag)
-                p.simple_plotter_zoom(line,a.data,a.header,3750,4250,save_flag,pflag)
+#                 p.simple_plotter_zoom(line,a.data,a.header,3750,4250,save_flag,pflag)
 #                 p.simple_plotter_zoom(line,a.data,a.header,92000,95000,save_flag,pflag)
     #             p.simple_plotter_zoom(line,a.data,a.header,-1e7,1e6,1,pflag)
     #             # total number of counts in histogram
